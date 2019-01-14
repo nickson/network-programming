@@ -2,7 +2,7 @@
 
 [Java](#Java)
 
-[Как се предава решението?](#Как се предава решението)
+[Как се предава решението](#Как се предава решението)
 
 ## C/C++
 
@@ -10,7 +10,7 @@
 Да се преработи кодът от файловете:
 [server DNS](https://github.com/nickson/network-programming/blob/master/TCP_sockets/TCP_DNSserver_IPv6_AAAA.c) 
 [client DNS](https://github.com/nickson/network-programming/blob/master/TCP_sockets/TCP_DNSclient_IPv6.c)
-така че сървърът да връща към клиента (вместо само 1вия намерен ipv6 адрес) всички ipv4 и ipv6 адреси, които съответстват на домейн името, подадено от клиента.
+така че сървърът да връща към клиента (вместо само 1-вия намерен IPv6 адрес) всички IPv4 и IPv6 адреси, които съответстват на домейн името, подадено от клиента.
 Напр. Клиентът се изпълнява със следните параметри:
 ```
 ]# ./TCP_DNSclient_IPv6_AAAA.out <server_IPv6_addesss> yahoo.com
@@ -45,8 +45,8 @@ AP_INET6 resolved address: 2001:67c:20d0::22
 
 #### Зад 2.
 Да се преработи кодът от файлa:
-https://github.com/nickson/network-programming/blob/master/IO_Multiplexing-Synchromous/select_chatServer.c 
-При свързване през telnet или написан от Вас клиент, първоначално да се пита за потребителско име, сървърът да запомня какво потребителско име е подадено от съответния мрежови сокет (в структура или във файл). При всяко следващо съобщение от клиента, да се изпиства в началото потребителското име на изпращащия
+[chat sync IO multiplexing](https://github.com/nickson/network-programming/blob/master/IO_Multiplexing-Synchromous/select_chatServer.c) 
+При свързване чрез telnet (или чрез написан от Вас клиент), първоначално да се пита за потребителско име, сървърът да запомня какво потребителско име е подадено от съответния мрежови сокет (в структура или във файл). При всяко следващо съобщение от клиента, да се изпиства в началото потребителското име на изпращащия:
 
 <*username*> says: <*message*>
 
@@ -71,7 +71,7 @@ user1 says: hello everybody!
 Да се преработи кодът от
 [Java simple echo](https://github.com/nickson/network-programming/tree/master/Java-TCP)
 
-Вместо сървърът да отваря нова нишка (thread) за всеки клиент, да създава thread pool, от който да се земат временно нишки със синхронизация.
+Вместо сървърът да отваря нова нишка (thread) за всеки клиент, да създава thread pool, от който да се заемат временно нишки със синхронизация.
 
 #### Зад. 4:
 Да се преработи кодът от
