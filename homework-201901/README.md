@@ -1,3 +1,6 @@
+[C/C++](## C/C++)
+[Java](## Java)
+
 ## C/C++
 
 #### Зад 1.
@@ -34,14 +37,16 @@ PF_INET resolved address: 62.44.96.22
 A total of 1 IPv6 addressses resolved:
 AP_INET6 resolved address: 2001:67c:20d0::22
 ```
-*Hint:*  Можете да ползвате hints.ai_family=AF_UNSPEC, за да получите едновременно IPv4 и IPv6.
+*Hint:*   Можете да ползвате hints.ai_family=AF_UNSPEC, за да получите едновременно IPv4 и IPv6.
 
 
 #### Зад 2.
 Да се преработи кодът от файлa:
 https://github.com/nickson/network-programming/blob/master/IO_Multiplexing-Synchromous/select_chatServer.c 
 При свързване през telnet или написан от Вас клиент, първоначално да се пита за потребителско име, сървърът да запомня какво потребителско име е подадено от съответния мрежови сокет (в структура или във файл). При всяко следващо съобщение от клиента, да се изпиства в началото потребителското име на изпращащия
+
 <*username*> says: <*message*>
+
 Пример:
 ```
 ]# telnet <server_IP> 3333
@@ -59,11 +64,13 @@ user1 says: hello everybody!
 ## Java
 
 #### Зад. 3:
-Да се преработи кодът от:
+Да се преработи кодът от
 [Java simple echo](https://github.com/nickson/network-programming/tree/master/Java-TCP)
+
 Вместо сървърът да отваря нова нишка (thread) за всеки клиент, да създава thread pool, от който да се земат временно нишки със синхронизация.
 
 #### Зад. 4:
-Да се преработи кодът от:
+Да се преработи кодът от
 [Java simple echo](https://github.com/nickson/network-programming/tree/master/Java-TCP)
+
 Комуникацияра да става по TLS/SSL, като сървърът се аутентикира с X.509 сертификат.
