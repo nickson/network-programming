@@ -1,5 +1,6 @@
-[C/C++](## C/C++)
-[Java](## Java)
+[C/C++](#C/C++)
+
+[Java](#Java)
 
 ## C/C++
 
