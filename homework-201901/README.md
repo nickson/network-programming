@@ -67,13 +67,8 @@ user1 says: hello everybody!
 
 ## Java
 
+
 #### Зад. 3:
-Да се преработи кодът от
-[Java simple echo](https://github.com/nickson/network-programming/tree/master/Java-TCP)
-
-Вместо сървърът да отваря нова нишка (thread) за всеки клиент, да създава thread pool, от който да се заемат временно нишки със синхронизация.
-
-#### Зад. 4:
 Да се преработи кодът от
 [Java simple echo](https://github.com/nickson/network-programming/tree/master/Java-TCP)
 
