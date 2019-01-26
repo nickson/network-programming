@@ -80,7 +80,7 @@ System.setProperty("javax.net.ssl.keyStore", SERVER_ROOT + "mySrvKeystore.jks");
 ```
 В противен случай трябва да напишете в документацията с какви system properties трябва да се изпълни даден файл, за да работи.
 
-За да тествате как се утановява TLS/SSL суединението, можете да ползвате например:
+*Hint 2:* За да тествате как се установява TLS/SSL съединението, можете да ползвате например:
 ```
 System.setProperty("javax.net.debug", "ssl");
 ```
