@@ -8,7 +8,7 @@
 
 #### Зад 1.
 Да се преработи кодът от файловете:
-[server DNS](https://github.com/nickson/network-programming/blob/master/TCP_sockets/TCP_DNSserver_IPv6_AAAA.c) 
+[server DNS](https://github.com/nickson/network-programming/blob/master/TCP_sockets/TCP_DNSserver_IPv6_AAAA.c) , 
 [client DNS](https://github.com/nickson/network-programming/blob/master/TCP_sockets/TCP_DNSclient_IPv6.c)
 така че сървърът да връща към клиента (вместо само 1-вия намерен IPv6 адрес) всички IPv4 и IPv6 адреси, които съответстват на домейн името, подадено от клиента.
 Напр. Клиентът се изпълнява със следните параметри:
