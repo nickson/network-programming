@@ -4,36 +4,33 @@
 #include <stdio.h>
 #include <string.h>
 
-#define SERVERPORT 3333    // the port users will be connecting to
-
-struct sockaddr_in server_addr;
+struct sockaddr_in6 server_addr;
 socklen_t addr_len = sizeof server_addr;
+
 int my_fd;
 int numbytes;
-char ans[34];
+char ans[46];
+
+#define SERVERPORT "3333"    // the port users will be connecting to
 
 int main(int argc, char *argv[])
 {
 
 
 	if (argc != 3) {
-		fprintf(stderr,"usage: talker hostname message.\n");
-		return 1;
-	}
-        if (strlen(argv[2]) > 253) {
-		fprintf(stderr,"The full domain name may not exceed a total length of 253 characters.\n");
+		fprintf(stderr,"usage: talker hostname message\n");
 		return 1;
 	}
 
-	if (inet_pton(AF_INET, argv[1], &(server_addr.sin_addr)) != 1) {
+	if (inet_pton(AF_INET6, argv[1], &(server_addr.sin6_addr)) != 1) {
 		fprintf(stderr, "Invalid address\n");
 		return 1;
 	}
-	server_addr.sin_family = AF_INET;
-	server_addr.sin_port = htons(SERVERPORT); //PORT;
+	server_addr.sin6_family = AF_INET6;
+	server_addr.sin6_port = htons(3333); //PORT;
 
 
-	if ((my_fd = socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
+	if ((my_fd = socket(AF_INET6, SOCK_DGRAM, 0)) == -1) {
 		perror("talker: socket");
 		return 2;
 	}
@@ -46,12 +43,12 @@ int main(int argc, char *argv[])
 
 	printf("sent %d bytes to %s\n", numbytes, argv[1]);
 	
-	if ((numbytes = recvfrom(my_fd, ans, 33 , 0, (struct sockaddr *)&server_addr, &addr_len)) == -1) {
+	if ((numbytes = recvfrom(my_fd, ans, 45, 0, (struct sockaddr *)&server_addr, &addr_len)) == -1) {
 		perror("recvfrom");
 		return 1;
 	}
 
-	ans[34] = '\0';
+	ans[numbytes] = '\0';
 	printf("Resolved IP address: '%s'\n",ans);
 
 	close(my_fd);

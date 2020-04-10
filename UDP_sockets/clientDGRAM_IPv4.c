@@ -9,7 +9,7 @@ socklen_t addr_len = sizeof server_addr;
 int my_fd;
 int numbytes;
 
-#define SERVERPORT "3333"    // the port users will be connecting to
+#define SERVERPORT 3333    // the port users will be connecting to
 
 int main(int argc, char *argv[])
 {
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	server_addr.sin_family = AF_INET;
-	server_addr.sin_port = htons(3333); //PORT;
+	server_addr.sin_port = htons(SERVERPORT); 
 
 
 	if ((my_fd = socket(AF_INET, SOCK_DGRAM, 0)) == -1) {

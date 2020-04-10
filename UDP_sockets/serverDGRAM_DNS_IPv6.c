@@ -12,20 +12,18 @@
 #include <sys/types.h>
 #include <netdb.h>
 
-
-struct sockaddr_in6 my_sock;
-
-int my_fd;
-
+#define SERVERPORT 3333
 #define MAXDNLEN 254
-char buf[MAXDNLEN];
 
+char buf[MAXDNLEN];
+int my_fd;
 int numbytes;
+struct sockaddr_in6 my_sock;
 struct sockaddr_in6 client_addr;
 socklen_t addr_len = sizeof client_addr;
 char s[INET6_ADDRSTRLEN];
 struct addrinfo hints, *infoptr, *p;
-char ans[40];
+char ans[45];
 
 int main(int argc, char *argv[])
 {
@@ -40,7 +38,7 @@ int main(int argc, char *argv[])
 	if(argc==1){
 		my_sock.sin6_family = AF_INET6;
 		my_sock.sin6_addr = in6addr_any;
-		my_sock.sin6_port = htons(3333); //PORT;
+		my_sock.sin6_port = htons(SERVERPORT);
 	}
 	else{
 		if (inet_pton(AF_INET6, argv[1], &(my_sock.sin6_addr)) != 1) {
@@ -48,7 +46,7 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 		my_sock.sin6_family = AF_INET6;
-		my_sock.sin6_port = htons(3333); //PORT;
+		my_sock.sin6_port = htons(SERVERPORT);
 		
 		char ipinput[INET6_ADDRSTRLEN];
 		inet_ntop(AF_INET6, &(my_sock.sin6_addr), ipinput, INET6_ADDRSTRLEN);

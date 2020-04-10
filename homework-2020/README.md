@@ -33,6 +33,7 @@
 127.0.0.9 	"The IP address: <изписва се> is found in the following Spamhaus public IP zone: '127.0.0.9 - SBL - Spamhaus DROP/EDROP Data'"
 127.0.0.10 	"The IP address: <изписва се> is found in the following Spamhaus public IP zone: '127.0.0.10 - PBL - ISP Maintained'"
 127.0.0.11 	"The IP address: <изписва се> is found in the following Spamhaus public IP zone: '127.0.0.11 - PBL - Spamhaus Maintained'"
+не е намерено такова хост име    "The IP address: <изписва се> is NOT found in the Spamhaus blacklists."
 ```
 
 *Hint:* Възможно е за IP адрес да бъдат върнати няколко отговора, пример:

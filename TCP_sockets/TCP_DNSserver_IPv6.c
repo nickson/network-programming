@@ -17,14 +17,15 @@
 #include <sys/wait.h>
 #include <signal.h>
 
+#define PORT 3333
 struct in6_addr my_addr;
 struct sockaddr_in6 my_sock;
 
 int my_fd, new_fd, numbytes;
 char buf[255];
-char ans[33];
+char ans[45];
 struct hostent *query;
-#define PORT "3333";
+
 
 int main(int argc, char *argv[])
 {
@@ -39,7 +40,7 @@ int main(int argc, char *argv[])
 	if(argc==1){
 		my_sock.sin6_family = PF_INET6;
 		my_sock.sin6_addr = in6addr_any;
-		my_sock.sin6_port = htons(3333); //PORT;
+		my_sock.sin6_port = htons(PORT);
 	}
 	else{
 		if (inet_pton(AF_INET6, argv[1], &(my_sock.sin6_addr)) != 1) {
@@ -48,7 +49,7 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 		my_sock.sin6_family = PF_INET6;
-		my_sock.sin6_port = htons(3333); //PORT;
+		my_sock.sin6_port = htons(PORT);
 		
 		char ipinput[INET6_ADDRSTRLEN];
 		inet_ntop(AF_INET6, &(my_sock.sin6_addr), ipinput, INET6_ADDRSTRLEN);

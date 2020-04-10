@@ -17,14 +17,17 @@
 #include <sys/wait.h>
 #include <signal.h>
 
+#define PORT 3333
+
 struct in6_addr my_addr;
 struct sockaddr_in6 my_sock;
 
 int my_fd, new_fd, numbytes;
 char buf[255];
-char ans[130];
+char ans[45];
 //struct hostent *query;
-#define PORT "3333";
+struct addrinfo hints, *servinfo;
+int retVal;
 
 int main(int argc, char *argv[])
 {
@@ -39,16 +42,15 @@ int main(int argc, char *argv[])
 	if(argc==1){
 		my_sock.sin6_family = PF_INET6;
 		my_sock.sin6_addr = in6addr_any;
-		my_sock.sin6_port = htons(3333); //PORT;
+		my_sock.sin6_port = htons(PORT);
 	}
 	else{
 		if (inet_pton(AF_INET6, argv[1], &(my_sock.sin6_addr)) != 1) {
-
 			fprintf(stderr, "Invalid address\n");
 			return 1;
 		}
 		my_sock.sin6_family = PF_INET6;
-		my_sock.sin6_port = htons(3333); //PORT;
+		my_sock.sin6_port = htons(PORT);
 		
 		char ipinput[INET6_ADDRSTRLEN];
 		inet_ntop(AF_INET6, &(my_sock.sin6_addr), ipinput, INET6_ADDRSTRLEN);
@@ -79,21 +81,20 @@ int main(int argc, char *argv[])
 				perror("recv");
 				exit(1);
 			}
-//			query=gethostbyname(buf);
-//			inet_ntop(query->h_addrtype, query->h_addr_list[0], ans,  sizeof ans); 
-			struct addrinfo hints, *servinfo;
-                        int rv;
-                        memset(&hints, 0, sizeof(hints));
- 			hints.ai_family = AF_INET6; // AF_INET or AF_INET6 to force version
-                        hints.ai_socktype = SOCK_STREAM;
-                        if ((rv = getaddrinfo(buf, NULL, &hints, &servinfo)) != 0) {
-       			  fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
-       			  return 1;
-       			}
-                        struct sockaddr_in6 * first = (struct sockaddr_in6 *)(servinfo->ai_addr);
-                        inet_ntop(servinfo->ai_family, &(first->sin6_addr), ans, sizeof ans);
-                        printf("resolved address: %s\n", ans);
-			if (send(new_fd, ans, 20, 0) == -1)
+			//			query=gethostbyname(buf);
+			//			inet_ntop(query->h_addrtype, query->h_addr_list[0], ans,  sizeof ans); 
+
+			memset(&hints, 0, sizeof(hints));
+			hints.ai_family = AF_INET6; // AF_INET or AF_INET6 to force version
+			hints.ai_socktype = SOCK_STREAM;
+			if ((retVal = getaddrinfo(buf, NULL, &hints, &servinfo)) != 0) {
+				fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(retVal));
+				return 1;
+			}
+			struct sockaddr_in6 * first = (struct sockaddr_in6 *)servinfo->ai_addr;  // equiv. to (struct sockaddr_in6 *)(servinfo->ai_addr)
+			inet_ntop(servinfo->ai_family, &(first->sin6_addr), ans, sizeof ans);      // first->sin6_addr is equivalent to (*first).sin6_addr
+			printf("resolved address: %s\n", ans);
+			if (send(new_fd, ans, sizeof(ans), 0) == -1)
 			perror("send");
 			close(new_fd);
 			exit(0);

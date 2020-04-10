@@ -10,9 +10,9 @@
 
 #include <arpa/inet.h>
 
-#define PORT "3333" // the port client will be connecting to 
+#define PORT 3333 // the port client will be connecting to 
 
-#define MAXDATASIZE 255 // max number of bytes we can get at once 
+#define MAXDATASIZE 46 // max number of bytes we can get at once 
 
 
 
@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 			fprintf(stderr, "Invalid address\n");
 			return 1;
 		}
-	my_sock.sin6_port = htons(3333);
+	my_sock.sin6_port = htons(PORT);
 
 	if (connect(my_fd, (struct sockaddr *)&my_sock, sizeof my_sock) == -1) {
 		close(my_fd);

@@ -10,10 +10,12 @@
 #include <stdio.h>
 #include <string.h>
 
+#define SERVERPORT 3333
+#define MAXBUFLEN 1000
+
 struct sockaddr_in my_sock;
 int my_fd;
 
-#define MAXBUFLEN 1000
 char buf[MAXBUFLEN];
 
 int numbytes;
@@ -34,7 +36,7 @@ int main(int argc, char *argv[])
 	if(argc==1){
 		my_sock.sin_family = AF_INET;
 		my_sock.sin_addr.s_addr = INADDR_ANY;
-		my_sock.sin_port = htons(3333); //PORT;
+		my_sock.sin_port = htons(SERVERPORT);
 	}
 	else{
 		if (inet_pton(AF_INET, argv[1], &(my_sock.sin_addr)) != 1) {
@@ -42,7 +44,7 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 		my_sock.sin_family = AF_INET;
-		my_sock.sin_port = htons(3333); //PORT;
+		my_sock.sin_port = htons(SERVERPORT);
 		
 		char ipinput[INET_ADDRSTRLEN];
 		inet_ntop(AF_INET, &(my_sock.sin_addr), ipinput, INET_ADDRSTRLEN);
@@ -66,7 +68,7 @@ int main(int argc, char *argv[])
 		buf[numbytes] = '\0';
 		printf("listener: packet contains \"%s\"\n", buf);
 	}
-//	close(my_fd);
-
+	// the 'while' condition must be changed to get here
+	close(my_fd);
 	return 0;
 }

@@ -10,13 +10,13 @@
 #include <string.h>
 #include <netdb.h>
 
-struct sockaddr_in my_sock;
-int my_fd;
-
+#define SERVERPORT 3333
 #define MAXDNLEN 254
-char buf[MAXDNLEN];
 
+char buf[MAXDNLEN];
+int my_fd;
 int numbytes;
+struct sockaddr_in my_sock;
 struct sockaddr_in client_addr;
 socklen_t addr_len = sizeof client_addr;
 char s[INET_ADDRSTRLEN];
@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
 	if(argc==1){
 		my_sock.sin_family = AF_INET;
 		my_sock.sin_addr.s_addr = INADDR_ANY;
-		my_sock.sin_port = htons(3333); //PORT;
+		my_sock.sin_port = htons(SERVERPORT);
 	}
 	else{
 		if (inet_pton(AF_INET, argv[1], &(my_sock.sin_addr)) != 1) {
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 		my_sock.sin_family = AF_INET;
-		my_sock.sin_port = htons(3333); //PORT;
+		my_sock.sin_port = htons(SERVERPORT);
 		
 		char ipinput[INET_ADDRSTRLEN];
 		inet_ntop(AF_INET, &(my_sock.sin_addr), ipinput, INET_ADDRSTRLEN);

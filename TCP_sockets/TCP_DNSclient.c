@@ -11,21 +11,17 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
-
 #include <arpa/inet.h>
 
-#define PORT "3333" // the port client will be connecting to 
+#define PORT 3333 // the port client will be connecting to by default
+#define MAXDATASIZE 255 // max number of bytes we can get at once 
 
-#define MAXDATASIZE 253 // max number of bytes we can get at once 
-
-
+int my_fd, numbytes;  
+char buf[MAXDATASIZE];
+struct sockaddr_in my_sock;	
 
 int main(int argc, char *argv[])
 {
-	int my_fd, numbytes;  
-	char buf[MAXDATASIZE];
-	struct sockaddr_in my_sock;
-	
 
 	if (argc != 3) {
 		fprintf(stderr,"usage: client serverIP hostname_to_resolve\n");
@@ -40,7 +36,7 @@ int main(int argc, char *argv[])
 
 	my_sock.sin_family = PF_INET;
 	my_sock.sin_addr.s_addr = inet_addr(argv[1]);
-	my_sock.sin_port = htons(3333);
+	my_sock.sin_port = htons(PORT);
 
 	if (connect(my_fd, (struct sockaddr *)&my_sock, sizeof my_sock) == -1) {
 		close(my_fd);
@@ -48,9 +44,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-
-
-	if (send(my_fd, argv[2], MAXDATASIZE, 0) == -1)
+	if (send(my_fd, argv[2], 255, 0) == -1)
 	perror("send");
 
 	if ((numbytes = recv(my_fd, buf, MAXDATASIZE-1, 0)) == -1) {

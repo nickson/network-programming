@@ -9,18 +9,20 @@
 #include <arpa/inet.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/types.h>
+#include <netdb.h>
 
-#define MAXBUFLEN 1000
-char buf[MAXBUFLEN];
-struct sockaddr_in6 my_sock;
+#define MAXDNLEN 254
 
+char buf[MAXDNLEN];
 int my_fd;
-
-
 int numbytes;
+struct sockaddr_in6 my_sock;
 struct sockaddr_in6 client_addr;
 socklen_t addr_len = sizeof client_addr;
 char s[INET6_ADDRSTRLEN];
+struct addrinfo hints, *infoptr, *p;
+char ans[45];
 
 int main(int argc, char *argv[])
 {
@@ -55,18 +57,38 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	while(1){
-		if ((numbytes = recvfrom(my_fd, buf, MAXBUFLEN-1 , 0, (struct sockaddr *)&client_addr, &addr_len)) == -1) {
+		if ((numbytes = recvfrom(my_fd, buf, MAXDNLEN-1 , 0, (struct sockaddr *)&client_addr, &addr_len)) == -1) {
 			perror("recvfrom");
 			return 1;
 		}
 
 		printf("listener: got packet from %s\n",
-		inet_ntop(client_addr.sin6_family,
-		&client_addr.sin6_addr, s, sizeof s));
+		inet_ntop(client_addr.sin6_family, &client_addr.sin6_addr, s, sizeof s));
 		printf("listener: packet is %d bytes long\n", numbytes);
 		buf[numbytes] = '\0';
 		printf("listener: packet contains \"%s\"\n", buf);
+
+		memset(&hints, 0, sizeof(hints));
+		hints.ai_family = AF_INET6; // AF_INET or AF_INET6 to force version
+		hints.ai_socktype = SOCK_STREAM;
+
+		int result = getaddrinfo(buf, NULL, &hints, &infoptr);
+		if (result) {
+			//	fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(result));
+			perror("getaddrinfo");
+			return 1;
+		}
+		struct sockaddr_in6 * first = (struct sockaddr_in6 *)(infoptr->ai_addr);
+		inet_ntop(infoptr->ai_family, &(first->sin6_addr), ans, sizeof ans);
+		printf("resolved address: %s\n", ans);
+
+		if ((numbytes = sendto(my_fd, ans, sizeof ans, 0, (struct sockaddr*)&client_addr, addr_len)) == -1) {
+			perror("sendto");
+			return 1;
+		}
+
 	}
-	close(my_fd);
+	//	close(my_fd);
+
 	return 0;
 }

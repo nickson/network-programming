@@ -17,15 +17,17 @@
 #include <sys/wait.h>
 #include <signal.h>
 
-//struct in6_addr my_addr;
+#define PORT 3333
+
 struct in_addr my_addr;
-//struct sockaddr_in6 my_sock;
 struct sockaddr_in my_sock;
+struct sockaddr_storage their_addr;
+socklen_t sin_size = sizeof(their_addr);
+
 int my_fd, new_fd, numbytes;
 char buf[255];
 char ans[33];
 struct hostent *query;
-#define PORT "3333";
 
 int main(int argc, char *argv[])
 {
@@ -40,7 +42,7 @@ int main(int argc, char *argv[])
 	if(argc==1){
 		my_sock.sin_family = PF_INET;
 		my_sock.sin_addr.s_addr = INADDR_ANY;
-		my_sock.sin_port = htons(3333); //PORT;
+		my_sock.sin_port = htons(PORT); 
 	}
 	else{
 		if (inet_pton(PF_INET, argv[1], &(my_sock.sin_addr)) != 1) {
@@ -49,7 +51,7 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 		my_sock.sin_family = PF_INET;
-		my_sock.sin_port = htons(3333); //PORT;
+		my_sock.sin_port = htons(PORT);
 		
 		char ipinput[INET_ADDRSTRLEN];
 		inet_ntop(PF_INET, &(my_sock.sin_addr), ipinput, INET_ADDRSTRLEN);
@@ -65,8 +67,6 @@ int main(int argc, char *argv[])
 		perror("listen");
 		return 1;
 	}
-	struct sockaddr_storage their_addr;
-	socklen_t sin_size = sizeof(their_addr);
 	
 	while(1){
 		new_fd = accept(my_fd, (struct sockaddr *)&their_addr, &sin_size);
