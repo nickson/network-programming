@@ -12,7 +12,7 @@ import java.util.logging.Logger;
  * @author Nick
  */
 
-public class TCP_echo_client {
+public class TCP_DNS_client {
     public static final int LISTENING_TCP_PORT = 3333;
 //    public static final String LISTENING_IP_ADDRESS = "localhost";
     
@@ -25,21 +25,22 @@ public class TCP_echo_client {
             System.out.println("Connected to echo server (" + mySock.getInetAddress().getHostAddress() + ")");
             
             PrintWriter outputToSock = new PrintWriter(mySock.getOutputStream(), true);
-            BufferedReader inputFromSock  = new BufferedReader(new InputStreamReader(mySock.getInputStream()));
-            
+            BufferedReader inputFromSock = new BufferedReader(new InputStreamReader(mySock.getInputStream()));
             BufferedReader keyboardReader = new BufferedReader(new InputStreamReader(System.in));
-            String sentence = keyboardReader.readLine();
             
-            while ( !sentence.equals("END") ) {
-                outputToSock.println(sentence);
-                String response = inputFromSock.readLine();
+            System.out.println("Enter domain name to resolve IP address(es):");
+            String host = keyboardReader.readLine();
+            outputToSock.println(host);
+            String response;
+            while((response=inputFromSock.readLine()) != null){
                 System.out.println(response);
-                sentence = keyboardReader.readLine();
             }
-            outputToSock.println(sentence);      // send the string "END" to the server to notify them to close the cocket
-            
+  
+            mySock.close();
+                    
         } catch (SocketException se){
-            Logger.getLogger(TCP_echo_client.class.getName()).log(Level.SEVERE, null, se);
+            Logger.getLogger(TCP_DNS_client.class.getName()).log(Level.SEVERE, null, se);
         }
+
      }
 }

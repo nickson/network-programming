@@ -4,11 +4,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
-import java.util.Date;
+//import java.net.SocketException;
+//import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * @author Nick
+ */
 
 public class TCPmultiServer_threads implements Runnable {    //TCPmultiServer_threads extends Thread  -> can be done either way 
 								//because TCPmultiServer_threads does not extend another class
@@ -36,17 +39,17 @@ public class TCPmultiServer_threads implements Runnable {    //TCPmultiServer_th
         try {
 
                 System.out.println("Got connection from " + clientSocket.getInetAddress());
-                BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);    //autoflush=true
+           	BufferedReader inputFromSock = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            	PrintWriter outputToSock = new PrintWriter(clientSocket.getOutputStream(), true);    //autoflush=true
                 //autoflush - A value indicating whether the stream should be automatically flushed when it is written to.
                 //equivalent to manual flush: out.flush(); -> This forces data to be sent to the server without closing the Socket.
                 String query;
                 while (true) {
-                    query = input.readLine();
+                    query = inputFromSock.readLine();
                     if (query == null || query.equals("END")) {  // Short-circuit evaluation
                         break;
                     }
-                    out.println(query);
+                    outputToSock.println(query);
                 }
                 System.out.println("Connection with " + clientSocket.getInetAddress() + " closed.");
                 clientSocket.close();

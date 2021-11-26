@@ -26,7 +26,7 @@ char s[INET_ADDRSTRLEN];
 int main(int argc, char *argv[])
 {
 
-	my_fd=socket(AF_INET,SOCK_DGRAM,0);
+	my_fd=socket(AF_INET,SOCK_DGRAM,17); 
 	if(my_fd==-1){
 		perror("socket");
 		return 1;
@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 	if(argc==1){
 		my_sock.sin_family = AF_INET;
 		my_sock.sin_addr.s_addr = INADDR_ANY;
-		my_sock.sin_port = htons(SERVERPORT);
+		my_sock.sin_port = htons(SERVERPORT);   //x86 x86_64 CPU - Little Endian
 	}
 	else{
 		if (inet_pton(AF_INET, argv[1], &(my_sock.sin_addr)) != 1) {

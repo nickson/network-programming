@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
 		perror("bind");
 		return 1;
 	}
-	//sleep(15);
+	
 	if (listen(my_fd, 10) == -1) {
 		perror("listen");
 		return 1;

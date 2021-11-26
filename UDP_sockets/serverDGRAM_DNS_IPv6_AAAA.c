@@ -69,10 +69,10 @@ int main(int argc, char *argv[])
 		printf("listener: packet contains \"%s\"\n", buf);
 
 		memset(&hints, 0, sizeof(hints));
-		hints.ai_family = AF_INET6; // AF_INET or AF_INET6 to force version
+		hints.ai_family = AF_INET6; // AF_INET or AF_INET6 to force version (= filter results)
 		hints.ai_socktype = SOCK_STREAM;
 
-		int result = getaddrinfo(buf, NULL, &hints, &infoptr);
+		int result = getaddrinfo(buf, NULL, &hints, &infoptr); //query DNS server, AAAA record
 		if (result) {
 			//	fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(result));
 			perror("getaddrinfo");

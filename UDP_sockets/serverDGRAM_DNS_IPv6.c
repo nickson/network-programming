@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
 	memset(&my_sock, 0, sizeof(my_sock));
 	if(argc==1){
 		my_sock.sin6_family = AF_INET6;
-		my_sock.sin6_addr = in6addr_any;
+		my_sock.sin6_addr = in6addr_any; //::
 		my_sock.sin6_port = htons(SERVERPORT);
 	}
 	else{
