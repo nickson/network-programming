@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	ans[34] = '\0';
+	ans[numbytes] = '\0';
 	printf("Resolved IP address: '%s'\n",ans);
 
 	close(my_fd);
