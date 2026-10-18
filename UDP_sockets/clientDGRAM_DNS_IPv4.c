@@ -11,7 +11,7 @@ struct sockaddr_in server_addr;
 socklen_t addr_len = sizeof server_addr;
 int my_fd;
 int numbytes;
-char ans[34];
+char ans[35];
 
 int main(int argc, char *argv[])
 {
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	ans[34] = '\0';
+	ans[numbytes] = '\0';
 	printf("Resolved IP address: '%s'\n",ans);
 
 	close(my_fd);
