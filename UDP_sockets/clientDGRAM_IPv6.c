@@ -3,6 +3,7 @@
 #include <arpa/inet.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 struct sockaddr_in6 server_addr;
 socklen_t addr_len = sizeof server_addr;
