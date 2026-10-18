@@ -9,6 +9,7 @@
 #include <arpa/inet.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 #define SERVERPORT 3333
 #define MAXBUFLEN 1000
