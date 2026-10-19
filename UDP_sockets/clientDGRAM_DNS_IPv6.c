@@ -12,14 +12,11 @@ socklen_t addr_len = sizeof server_addr;
 
 int my_fd;
 int numbytes;
-char ans[45];
 
 int main(int argc, char *argv[])
 {
-
-
 	if (argc != 3) {
-		fprintf(stderr,"usage: talker hostname message\n");
+		fprintf(stderr, "usage: talker hostname message\n");
 		return 1;
 	}
 
@@ -28,30 +25,20 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	server_addr.sin6_family = AF_INET6;
-	server_addr.sin6_port = htons(SERVERPORT); //PORT;
-
+	server_addr.sin6_port = htons(SERVERPORT);
 
 	if ((my_fd = socket(AF_INET6, SOCK_DGRAM, 0)) == -1) {
 		perror("talker: socket");
 		return 2;
 	}
 
-
-	if ((numbytes = sendto(my_fd, argv[2], strlen(argv[2]), 0, (struct sockaddr*)&server_addr, addr_len)) == -1) {
+	if ((numbytes = sendto(my_fd, argv[2], strlen(argv[2]), 0, (struct sockaddr *)&server_addr, addr_len)) == -1) {
 		perror("talker: sendto");
+		close(my_fd);
 		return 1;
 	}
 
-	printf("sent %d bytes to %s\n", numbytes, argv[1]);
-	
-	if ((numbytes = recvfrom(my_fd, ans, 33 , 0, (struct sockaddr *)&server_addr, &addr_len)) == -1) {
-		perror("recvfrom");
-		return 1;
-	}
-
-	ans[numbytes] = '\0';
-	printf("Resolved IP address: '%s'\n",ans);
-
+	printf("talker: sent %d bytes to %s\n", numbytes, argv[1]);
 	close(my_fd);
 
 	return 0;
