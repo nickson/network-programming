@@ -15,14 +15,12 @@ char ans[35];
 
 int main(int argc, char *argv[])
 {
-
-
 	if (argc != 3) {
-		fprintf(stderr,"usage: talker hostname message.\n");
+		fprintf(stderr, "usage: talker hostname message.\n");
 		return 1;
 	}
-        if (strlen(argv[2]) > 253) {
-		fprintf(stderr,"The full domain name may not exceed a total length of 253 characters.\n");
+	if (strlen(argv[2]) > 253) {
+		fprintf(stderr, "The full domain name may not exceed a total length of 253 characters.\n");
 		return 1;
 	}
 
@@ -31,29 +29,29 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	server_addr.sin_family = AF_INET;
-	server_addr.sin_port = htons(SERVERPORT); //PORT;
-
+	server_addr.sin_port = htons(SERVERPORT);
 
 	if ((my_fd = socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
 		perror("talker: socket");
 		return 2;
 	}
 
-
-	if ((numbytes = sendto(my_fd, argv[2], strlen(argv[2]), 0, (struct sockaddr*)&server_addr, addr_len)) == -1) {
+	if ((numbytes = sendto(my_fd, argv[2], strlen(argv[2]), 0, (struct sockaddr *)&server_addr, addr_len)) == -1) {
 		perror("talker: sendto");
+		close(my_fd);
 		return 1;
 	}
 
 	printf("sent %d bytes to %s\n", numbytes, argv[1]);
-	
-	if ((numbytes = recvfrom(my_fd, ans, 33 , 0, (struct sockaddr *)&server_addr, &addr_len)) == -1) {
+
+	if ((numbytes = recvfrom(my_fd, ans, sizeof(ans) - 1, 0, (struct sockaddr *)&server_addr, &addr_len)) == -1) {
 		perror("recvfrom");
+		close(my_fd);
 		return 1;
 	}
 
 	ans[numbytes] = '\0';
-	printf("Resolved IP address: '%s'\n",ans);
+	printf("Resolved IP address: '%s'\n", ans);
 
 	close(my_fd);
 
