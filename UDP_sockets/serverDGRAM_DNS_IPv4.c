@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <netdb.h>
+#include <unistd.h>
 
 #define SERVERPORT 3333
 #define MAXDNLEN 254
@@ -26,59 +27,68 @@ char ans[33];
 
 int main(int argc, char *argv[])
 {
-
-	my_fd=socket(AF_INET,SOCK_DGRAM,0);
-	if(my_fd==-1){
+	my_fd = socket(AF_INET, SOCK_DGRAM, 0);
+	if (my_fd == -1) {
 		perror("socket");
 		return 1;
 	}
-	
+
 	memset(&my_sock, 0, sizeof(my_sock));
-	if(argc==1){
+	if (argc == 1) {
 		my_sock.sin_family = AF_INET;
 		my_sock.sin_addr.s_addr = INADDR_ANY;
 		my_sock.sin_port = htons(SERVERPORT);
-	}
-	else{
+	} else {
 		if (inet_pton(AF_INET, argv[1], &(my_sock.sin_addr)) != 1) {
 			fprintf(stderr, "Invalid address\n");
+			close(my_fd);
 			return 1;
 		}
 		my_sock.sin_family = AF_INET;
 		my_sock.sin_port = htons(SERVERPORT);
-		
+
 		char ipinput[INET_ADDRSTRLEN];
 		inet_ntop(AF_INET, &(my_sock.sin_addr), ipinput, INET_ADDRSTRLEN);
 		printf("IP Address = %s\n", ipinput);
-
+		fflush(stdout);
 	}
-	if( bind(my_fd, (struct sockaddr *)&my_sock, sizeof my_sock) == -1){
+
+	if (bind(my_fd, (struct sockaddr *)&my_sock, sizeof my_sock) == -1) {
 		perror("bind");
+		close(my_fd);
 		return 1;
 	}
-	while(1){
-		if ((numbytes = recvfrom(my_fd, buf, MAXDNLEN-1, 0, (struct sockaddr *)&client_addr, &addr_len)) == -1) {
+
+	while (1) {
+		addr_len = sizeof client_addr;
+		if ((numbytes = recvfrom(my_fd, buf, MAXDNLEN - 1, 0, (struct sockaddr *)&client_addr, &addr_len)) == -1) {
 			perror("recvfrom");
 			return 1;
 		}
 
 		printf("listener: got packet from %s\n",
-		inet_ntop(client_addr.sin_family,
-		&client_addr.sin_addr, s, sizeof s));
+			inet_ntop(client_addr.sin_family, &client_addr.sin_addr, s, sizeof s));
 		printf("listener: packet is %d bytes long\n", numbytes);
 		buf[numbytes] = '\0';
 		printf("listener: packet contains \"%s\"\n", buf);
 
-		query=gethostbyname(buf);
-		inet_ntop(query->h_addrtype, query->h_addr_list[0], ans,  sizeof ans);
+		query = gethostbyname(buf);
+		if (query == NULL || query->h_addr_list[0] == NULL) {
+			herror("gethostbyname");
+			snprintf(ans, sizeof ans, "NOT_FOUND");
+		} else {
+			inet_ntop(query->h_addrtype, query->h_addr_list[0], ans, sizeof ans);
+		}
 
-		if ((numbytes = sendto(my_fd, ans, strlen(ans), 0, (struct sockaddr*)&client_addr, addr_len)) == -1) {
+		printf("resolved address: %s\n", ans);
+		fflush(stdout);
+
+		if ((numbytes = sendto(my_fd, ans, strlen(ans), 0, (struct sockaddr *)&client_addr, addr_len)) == -1) {
 			perror("sendto");
 			return 1;
 		}
-
 	}
-//	close(my_fd);
 
+	close(my_fd);
 	return 0;
 }
